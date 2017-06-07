@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en"
+	layout:decorator="layouts/main">
+<head>
+	<title>Manage Users</title>
+</head>
+<body>
+		
+	<div layout:fragment="content">
+	
+		<div class="container">
+		<h1>Manage Users</h1>
+		    <div class="addUser">
+		        
+		        <h2>Add User</h2>
+		        
+		        <form>
+			        <div>
+				        <label for="email">Email: </label>
+				        <input type="email" id="email" name="email"/><br/>
+				        <label for="password">Password:</label>
+				        <input type="password" id="password" name="password"/><br/>
+				        <label for="firstName">First Name:</label>
+				        <input type="text" id="firstName" name="firstName"/><br/>
+				        <label for="lastName">Last Name:</label>
+				        <input type="text" id="lastName" name="lastName"/><br/>
+				        <label for="phoneNumber">Phone number:</label>
+				        <input type="text" id="phoneNumber" name="phoneNumber"/><br/>
+				        <label for="activeStatus">Active</label>
+				        <input type="checkbox" id="activeStatus" name="activeStatus"/>
+				        <label for="inActiveStatus">Inactive</label>
+				        <input type="checkbox" id="inActiveStatus" name="inActiveStatus"/> <br />
+				        <input type="submit" id="addUserSubmit" name="addUserSubmit" value="Submit" /><br />
+			        </div>
+		        </form>
+		    </div>
+		    
+		   <!--  <div class="removeUser">
+		        
+		        <h2>Remove User</h2>
+		        
+		        <form>
+			        <div>
+				        <label for="email">Email: </label>
+				        <input type="email" id="email" name="email"/><br/>
+				        <input type="submit" id="removeUserSubmit" name="removeUserSubmit" value="Submit" /><br />
+			        </div>
+		        </form>
+		    </div> -->
+		
+		
+		</div>	
+		
+	</div>
+		
+</body>
+
+
+</html>
