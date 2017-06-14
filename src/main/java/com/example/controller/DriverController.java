@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.domain.Route;
+import com.example.domain.entity.Route;
 import com.example.enums.RouteTimes;
 import com.example.repositories.RouteRepository;
 

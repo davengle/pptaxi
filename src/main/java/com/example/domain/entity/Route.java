@@ -1,4 +1,4 @@
-package com.example.domain;
+package com.example.domain.entity;
 
 import java.util.Date;
 
@@ -24,11 +24,7 @@ public class Route {
 	@Column
 	private Date endTime;
 	
-	
-	
-	private Route(){
-		
-	};
+	public Route() {}
 	
 	public Route(Date startTime, Date endTime){
 		this.setStartTime(startTime);
