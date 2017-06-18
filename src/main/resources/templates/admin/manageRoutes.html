@@ -9,21 +9,89 @@
 	<div layout:fragment="content">
 	
 		<div class="container">
-	
-		    <div class="starter-template">
 		        <h1>Manage Routes</h1>
-		        
-		        	<label for="day">Select Day: </label>
-			        <input type="text" id="day" name="day"/><br/>
-			        
-			        <label for="startTime">Start Time:</label>
-			        <input type="text" id="startTime" name="startTime"/><br/>
-			        
-			        <label for="endTime">End Time:</label>
-			        <input type="text" id="endTime" name="endTime"/><br/>
-		      
-		    </div>
-		
+		       	<div class="addRoute">
+		       		<h2> Add new routes:</h2>
+			        <form th:object="${route}"  th:action="@{/admin/route/save}" method="post">
+						<div th:class="form-group" th:classappend="${#fields.hasErrors('routeDate')}? 'has-error'">
+							<div class="col-sm-2 control-lable">
+								<label for="newRouteDate"><span class="required">*</span>Select Day:</label>
+							</div>
+							<div class="col-md-10">
+								<input type="date" id="newRouteDate" name="newRouteDate" th:field="*{routeDate}" />
+								<span th:if="${#fields.hasErrors('routeDate')}" th:errors="*{routeDate}"
+									th:class="help-block">New Route Errors</span>
+							</div>
+						</div>
+						<div th:class="form-group" th:classappend="${#fields.hasErrors('startTime')}? 'has-error'">
+							<div class="col-sm-2 control-lable">
+								<label for="startTime"><span class="required">*</span>Start Time:</label>
+							</div>
+							<div class="col-md-10">
+								<select id="startTime"  th:value="*{startTime}" th:field="*{startTime}">
+									<option th:each="routeTime : ${routeTimes}" th:value="${routeTime.startTime}"	th:text = "${routeTime.startTime}"></option>
+								</select>
+							</div>
+						</div>
+						<div th:class="form-group" th:classappend="${#fields.hasErrors('quantity')}? 'has-error'">
+							<div class="col-sm-2 control-lable">
+								<label for="quantity">Quantity:</label>
+							</div>
+							<div class="col-md-10">
+									<input type="text" id="quantity" name="quantity" th:field="*{quantity}" />
+									<span th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" th:class="help-block">Quantity Errors</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-12">
+				        		<input type="submit" id="createRouteSubmit" name="createRouteSubmit" value="Submit" />
+				        	</div> 
+			        	</div>
+				     </form>
+			     </div>
+			     
+		    	<div class="viewRoute">
+		    		<h2> View current routes</h2>
+				    <form th:object="${route}"  th:action="@{/admin/route/view}" method="get">
+				        <div th:class="form-group" th:classappend="${#fields.hasErrors('routeDate')}? 'has-error'">
+							<div class="col-sm-2 control-lable">
+								<label for="existingRouteDate"><span class="required">*</span>Select Day:</label>
+							</div>
+							<div class="col-md-10">
+								<input type="date" id="existingRouteDate" name="existingRouteDate" th:field="*{routeDate}" />
+								<span th:if="${#fields.hasErrors('routeDate')}" th:errors="*{routeDate}"
+									th:class="help-block">Existing Route Date Errors</span>
+							</div>
+						</div>
+						<div class="existingRouteSubmit">
+			        		<input type="submit" id="existingRouteSubmit" name="exisitingRouteSubmit" value="Submit" />
+			        	</div>
+				     </form>
+			    </div>
+			    
+			    <div class="routesTable">
+			    	<div th:if="${not #lists.isEmpty(currentRoutes)}">
+			    	<h2> Current Routes </h2>
+			    	<table class="table table-striped">
+			    		<tr>
+			    			<th>Route Date</th>
+			    			<th>Start Time</th>
+			    			<th>End Time</th>
+			    		</tr>
+			    		<tr th:each="route : ${currentRoutes}">
+			    			<td th:text="${route.routeDate}"></td>
+			    			<td th:text="${route.startTime}"></td>
+			    			<td th:text="${route.endTime}"></td>
+			    		</tr>
+			    		
+			    	</table>
+			    	
+			    	
+			    	
+			    	</div>
+			    	
+			    </div>
+			        	
 		</div>	
 		
 	</div>

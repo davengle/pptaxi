@@ -1,13 +1,17 @@
 package com.example.domain.entity;
 
-import java.util.Date;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.hibernate.envers.Audited;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Audited
@@ -19,40 +23,64 @@ public class Route {
 	private Long id;
 	
 	@Column
-	private Date startTime;	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate routeDate;
 	
 	@Column
-	private Date endTime;
+	@DateTimeFormat(pattern ="HH:mm")
+	private LocalTime startTime;	
+	
+	@Column
+	@DateTimeFormat(pattern ="HH:mm")
+	private LocalTime endTime;
+	
+	
+	
+	@Transient
+	private Integer quantity;
+	
+	public  static final Duration ROUTE_DURATION = Duration.ofHours(3);
 	
 	public Route() {}
 	
-	public Route(Date startTime, Date endTime){
-		this.setStartTime(startTime);
-		this.setEndTime(endTime);
+	public Route(LocalDate routeDate){
+		this.setRouteDate(routeDate);
 	}
 
-	public Date getStartTime() {
+	public LocalDate getRouteDate() {
+		return routeDate;
+	}
+
+	public void setRouteDate(LocalDate routeDate) {
+		this.routeDate = routeDate;
+	}
+
+	public LocalTime getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(LocalTime startTime) {
 		this.startTime = startTime;
+		this.endTime = this.startTime.plus(ROUTE_DURATION);
 	}
 
-	public Date getEndTime() {
+	public LocalTime getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	@Override
-	public String toString() {
-		return "Route [startTime=" + startTime + ", endTime=" + endTime + "]";
-	}
+	
+
+	
 }

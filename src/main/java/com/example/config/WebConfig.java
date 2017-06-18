@@ -14,5 +14,7 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 		registry.addViewController("/login").setViewName("auth/login");
 		registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
 	}
+	
+	
 
 }

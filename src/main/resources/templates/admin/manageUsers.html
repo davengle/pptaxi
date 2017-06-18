@@ -9,110 +9,107 @@
 
 		<div class="container">
 			<h1>Manage Users</h1>
-
-
-			<div>
+			
+			<div class="retriveUser">
 				<h2>Retrieve User</h2>
-				<form th:object="${user}" th:action="@{/admin/user/retrieve}"
-					method="get">
-					<div>
-						<label for="email">Email: </label> <input type="text" id="email"
-							name="email" th:field="*{email}" /><br /> <input type="submit"
-							id="retrieveUserSubmit" name="retrieveUserSubmit" value="Submit" /><br />
+				<form th:object="${user}" th:action="@{/admin/user/retrieve}" method="get">
+					<div th:class="form-group"
+						th:classappend="${#fields.hasErrors('email')}? 'has-error'">
+						<div class="col-sm-2 control-lable">
+							<label for="email"><span class="required">*</span>Email:</label>
+						</div>
+						<div class="col-md-10">
+							<input type="text" id="email" name="email" th:field="*{email}" />
+							<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+								th:class="help-block">Email Errors</span>
+						</div>
 					</div>
+					<div th:class="col-md-12">
+						<input type="submit" id="retrieveUserSubmit" name="retrieveUserSubmit" value="Submit" />
+					</div>
+					
 				</form>
-
 			</div>
-
-
+			
 			<div class="addUser">
-
 				<h2>Create/Modify User</h2>
-				<form th:object="${user}" th:action="@{/admin/user/save}"
-					method="post">
-					<div>
-						<input type="hidden" th:field="*{id}" /><br />
-						<div th:class="form-group"
-							th:classappend="${#fields.hasErrors('email')}? 'has-error'">
-							<div class="col-sm-2 control-lable">
-								<label for="email"><span class="required">*</span>Email:</label>
-							</div>
-							<div class="col-md-10">
-								<input type="text" id="email" name="email" th:field="*{email}" />
-								<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-									th:class="help-block">Email Errors</span>
-							</div>
+				<form th:object="${user}" th:action="@{/admin/user/save}" method="post">
+					<div><input type="hidden" th:field="*{id}"/></div>
+					<div th:class="form-group" th:classappend="${#fields.hasErrors('email')}? 'has-error'">
+						<div class="col-sm-2 control-lable">
+							<label for="email"><span class="required">*</span>Email:</label>
 						</div>
-						<div th:class="form-group"
-							th:classappend="${#fields.hasErrors('password')}? 'has-error'">
-							<div class="col-md-2">
-								<label for="email"><span class="required">*</span>Password:</label>
-							</div>
-							<div class="col-md-10">
-								<input type="text" id="password" name="password"
-									th:field="*{password}" /> <span
-									th:if="${#fields.hasErrors('password')}"
-									th:errors="*{password}" th:class="help-block">Password
-									Errors</span>
-							</div>
+						<div class="col-md-10">
+							<input type="text" id="email" name="email" th:field="*{email}" />
+							<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+								th:class="help-block">Email Errors</span>
 						</div>
-						<div th:class="form-group"
-							th:classappend="${#fields.hasErrors('firstName')}? 'has-error'">
-							<div class="col-md-2">
-								<label for="firstName">First
-									Name:</label>
-							</div>
-							<div class="col-md-10">
-								<input type="text" id="firstName" name="firstName"
-									th:field="*{firstName}" /> <span
-									th:if="${#fields.hasErrors('firstName')}"
-									th:errors="*{firstName}" th:class="help-block">First
-									Name Errors</span>
-							</div>
+					</div>
+					<div th:class="form-group" th:classappend="${#fields.hasErrors('password')}? 'has-error'">
+						<div class="col-md-2">
+							<label for="password"><span class="required">*</span>Password:</label>
 						</div>
-						<div th:class="form-group"
-							th:classappend="${#fields.hasErrors('lastName')}? 'has-error'">
-							<div class="col-md-2">
-								<label for="lastName">Last
-									Name:</label>
-							</div>
-							<div class="col-md-10">
-								<input type="text" id="lastName" name="lastName"
-									th:field="*{lastName}" /> <span
-									th:if="${#fields.hasErrors('lastName')}"
-									th:errors="*{lastName}" th:class="help-block">Last Name
-									Errors</span>
-							</div>
+						<div class="col-md-10">
+							<input type="text" id="password" name="password"
+								th:field="*{password}" /> <span
+								th:if="${#fields.hasErrors('password')}"
+								th:errors="*{password}" th:class="help-block">Password
+								Errors</span>
 						</div>
-						<div th:class="form-group"
-							th:classappend="${#fields.hasErrors('phoneNumber')}? 'has-error'">
-							<div class="col-md-2">
-								<label for="phoneNumber">Phone
-									Number:</label>
-							</div>
-							<div class="col-md-10">
-								<input type="text" id="phoneNumber" name="phoneNumber"
-									th:field="*{phoneNumber}" /> <span
-									th:if="${#fields.hasErrors('phoneNumber')}"
-									th:errors="*{phoneNumber}" th:class="help-block">Phone
-									Number Errors</span>
-							</div>
+					</div>
+					<div th:class="form-group" th:classappend="${#fields.hasErrors('firstName')}? 'has-error'">
+						<div class="col-md-2">
+							<label for="firstName">First
+								Name:</label>
 						</div>
-							<div th:class="form-group">
-								<div class="col-md-2">
-									<label for="role">Role:</label>
-								</div>
-								<div class="col-md-10">
-									<select id="role" name="role">
-									<!-- <select id="role name="role" th:field="*{role}" /> -->
-									<option
-										th:each="role : ${T(com.example.enums.UserRole).values()}"
-										th:value="${role}" th:text="${role}"></option>
-									</select>
-								</div>
-							</div>
-							<input type="submit" id="addUserSubmit" name="addUserSubmit"
-								value="Submit" /><br />
+						<div class="col-md-10">
+							<input type="text" id="firstName" name="firstName"
+								th:field="*{firstName}" /> <span
+								th:if="${#fields.hasErrors('firstName')}"
+								th:errors="*{firstName}" th:class="help-block">First
+								Name Errors</span>
+						</div>
+					</div>
+					<div th:class="form-group" th:classappend="${#fields.hasErrors('lastName')}? 'has-error'">
+						<div class="col-md-2">
+							<label for="lastName">Last
+								Name:</label>
+						</div>
+						<div class="col-md-10">
+							<input type="text" id="lastName" name="lastName"
+								th:field="*{lastName}" /> <span
+								th:if="${#fields.hasErrors('lastName')}"
+								th:errors="*{lastName}" th:class="help-block">Last Name
+								Errors</span>
+						</div>
+					</div>
+					<div th:class="form-group" th:classappend="${#fields.hasErrors('phoneNumber')}? 'has-error'">
+						<div class="col-md-2">
+							<label for="phoneNumber">Phone
+								Number:</label>
+						</div>
+						<div class="col-md-10">
+							<input type="text" id="phoneNumber" name="phoneNumber"
+								th:field="*{phoneNumber}" /> <span
+								th:if="${#fields.hasErrors('phoneNumber')}"
+								th:errors="*{phoneNumber}" th:class="help-block">Phone
+								Number Errors</span>
+						</div>
+					</div>
+					<div th:class="form-group">
+						<div class="col-md-2">
+							<label for="role">Role:</label>
+						</div>
+						<div class="col-md-10">
+							<select id="role" name="role">
+							<option
+								th:each="role : ${T(com.example.enums.UserRole).values()}"
+								th:value="${role}" th:text="${role}"></option>
+							</select>
+						</div>
+					</div>
+					<div th:class="addUserSubmit">
+						<input type="submit" id="addUserSubmit" name="addUserSubmit" value="Submit" />
 					</div>
 				</form>
 			</div>
