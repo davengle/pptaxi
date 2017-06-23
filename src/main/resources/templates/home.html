@@ -12,8 +12,8 @@
 	
 		    <div class="starter-template">
 		        <h1>Select activity:</h1>
-		        <h2>1. <a th:href="@{/driver/selectRoute}">Route sign-up</a></h2>
-		        <h2>2. <a th:href="@{/admin/options}">Admin options</a></h2>
+		        <h2>1. <a th:href="@{/driver/modifyRoutes}">Route sign-up</a></h2>
+		        <h2 sec:authorize="hasRole('ROLE_ADMIN')">2. <a th:href="@{/admin/options}">Admin options</a></h2>
 		    </div>
 		
 		</div>	

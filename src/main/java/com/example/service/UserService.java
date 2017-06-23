@@ -1,13 +1,16 @@
 package com.example.service;
 
+import java.util.List;
+
+import com.example.domain.entity.Route;
 import com.example.domain.entity.User;
 
 
 public interface UserService {
 
-	public User findByEmail(String email);
+	User findByEmail(String email);
 	
+	User save(User user);
 	
-	public User save(User user);
-
+	List<Route> findAllRoutesByEmail(String email);
 }

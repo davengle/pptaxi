@@ -10,19 +10,76 @@
 		<div class="container">
 
 			<div class="starter-template">
-				<h1>Select the route:</h1>
 
-				<form>
-					<div>
-						<label for="routeDate">Date:</label> 
-						<input type='date' name='routeDate' id='routeDate' /><br /> 
-						<label for="routes">Routes:</label>
-						<input type="text" id="routes" name="routes" /><br />
-						<input type="submit" id="routes" name="routes" value="Submit" /><br />
+
+				<form th:object="${route}"  th:action="@{/driver/selectDate}" method="post">
+					<div class="selectRouteDate">
+					<h1>Select Date:</h1>
+						<div th:class="row">
+							<div th:class="form-group">
+								<div class="col-sm-1 control -label">
+									<label for="routeDate">Date:</label> 
+								</div>
+								<div th:class="col-sm-2">
+									<input type='date' name='routeDate' id='routeDate' th:value="${route.routeDate}" th:field="*{routeDate}"/>
+								</div>
+								<div th:class="col-sm-9">
+									<input type="submit" id="routeDateSubmit" name="routeDateSubmit" value="Submit" />
+								</div>
+							</div>
+						</div>
 					</div>
-
 				</form>
+				 <form th:object="${route}"  th:action="@{/driver/assignRoutes}" method="post">
+					<div class="selectRouteTimes">
+						<h1>Available route start times:</h1>
+						<div th:class="row">
+							<div th:class="form-group">
+								<div class="col-sm-1 control -label">
+									<label for="routeDate">Date:</label> 
+								</div>
+								<div th:class="col-sm-10">
+									<input type='date' name='addRouteDate' id='addRouteDate' th:value="${route.routeDate}" th:field="*{routeDate}"/>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-1">
+								<label for="startTime">Routes:</label>
+							</div>
+							<div class="col-md-10">
+								<select id="startTime"  name="startTime" th:value="*{startTime}" th:field="*{startTime}">
+										<option th:each="routeTime : ${availableRouteTimes}" th:value="${routeTime.startTime}"	th:text="${routeTime.startTime}"></option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-2">
+								<input type="submit" id="routeTimeSubmit" name="routeTimeSubmt" value="Add" />
+							</div>
+						</div>
+					</div>
+				</form> 
 
+				<h2> Current selected routes</h2>
+				<div class="viewCurrentRoutes">
+					<div class="routesTable">
+				    	<div th:if="${not #lists.isEmpty(selectedRoutes)}">
+					    	<table class="table table-striped">
+					    		<tr>
+					    			<th>Route Date</th>
+					    			<th>Start Time</th>
+					    			<th>End Time</th>
+					    		</tr>
+					    		<tr th:each="route : ${selectedRoutes}">
+					    			<td th:text="${route.routeDate}"></td>
+					    			<td th:text="${route.startTime}"></td>
+					    			<td th:text="${route.endTime}"></td>
+					    		</tr>
+					    	</table>
+				    	</div>
+			    	</div>
+				</div>
 
 			</div>
 

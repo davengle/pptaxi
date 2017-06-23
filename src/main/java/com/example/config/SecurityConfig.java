@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-import com.example.service.UserServiceImpl;
+import com.example.service.impl.UserServiceImpl;
 
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
@@ -24,15 +24,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		
 		auth
 			.userDetailsService(userService);
-		
-//			.inMemoryAuthentication()
-//				.withUser("jonny@gmail.com")
-//					.password("password")
-//					.roles("ADMIN").and()
-//				.withUser("scott@gmail.com")
-//					.password("password")
-//					.roles("USER");
-
 	}
 	
 	/*

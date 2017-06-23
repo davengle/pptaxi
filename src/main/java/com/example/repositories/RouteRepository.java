@@ -6,10 +6,18 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 import com.example.domain.entity.Route;
+import com.example.domain.entity.User;
 
 public interface RouteRepository extends CrudRepository<Route, Long> {
 	
 	
-	public List<Route> findAllByRouteDate(LocalDate localDate);
+	List<Route> findAll();
+	
+	List<Route> findAllByRouteDate(LocalDate localDate);
+	
+	List<Route> findAllByRouteDateAndUser(LocalDate date, User user);
+	
+	List<Route> findAllByUser(User user);
+	
 
 }

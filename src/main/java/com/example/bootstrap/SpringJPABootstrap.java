@@ -2,6 +2,8 @@ package com.example.bootstrap;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -14,7 +16,7 @@ import com.example.domain.entity.User;
 import com.example.enums.UserRole;
 import com.example.repositories.RouteTimeTypeRepository;
 import com.example.service.RouteService;
-import com.example.service.UserServiceImpl;
+import com.example.service.UserService;
 
 @Component
 public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedEvent> {
@@ -23,10 +25,23 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
 	private RouteService routeService;
 
 	@Autowired
-	private UserServiceImpl userService;
+	private UserService userService;
 
 	@Autowired
 	private RouteTimeTypeRepository routeTimeRepository;
+	
+	
+	LocalDate yesterday = LocalDate.now().minusDays(1);
+	LocalDate today = LocalDate.now();
+	LocalDate tomorrow = LocalDate.now().plusDays(1);
+	Route route1 = new Route(yesterday);
+	Route route2 = new Route(today);
+	Route route3 = new Route(today);
+	Route route4 = new Route(tomorrow);
+	Route route5 = new Route(tomorrow);
+	Route route6 = new Route(tomorrow);
+	User jonny = new User("jonny@gmail.com", "j");
+	User scott = new User("scott@gmail.com", "s");
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -38,21 +53,31 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
 		loadUsers();
 		loadRouteTimes();
 		loadRoutes();
+		assignRoutes();
 
 	}
 
 	private void loadRoutes() {
-		Route route1 = new Route(LocalDate.now());
-		route1.setStartTime(LocalTime.now());
-		routeService.save(route1);
-
-		Route route2 = new Route(LocalDate.now());
-		route2.setStartTime(LocalTime.now());
-		routeService.save(route2);
 		
-		Route route3 = new Route(LocalDate.now());
-		route3.setStartTime(LocalTime.now());
+		//Yesterday - 1 route
+		route1.setStartTime(LocalTime.now().truncatedTo(ChronoUnit.HOURS));
+		routeService.save(route1);
+		
+		
+		//Today - 2 routes
+		route2.setStartTime(LocalTime.now().plusHours(1).truncatedTo(ChronoUnit.HOURS));
+		route3.setStartTime(LocalTime.now().plusHours(2).truncatedTo(ChronoUnit.HOURS));
+		routeService.save(route2);
 		routeService.save(route3);
+		
+		
+		//Tomorrow - 3 routes
+		route4.setStartTime(LocalTime.now().truncatedTo(ChronoUnit.HOURS));
+		route5.setStartTime(LocalTime.now().plusHours(1).truncatedTo(ChronoUnit.HOURS));
+		route6.setStartTime(LocalTime.now().plusHours(2).truncatedTo(ChronoUnit.HOURS));
+		routeService.save(route4);
+		routeService.save(route5);
+		routeService.save(route6);
 	}
 
 	private void loadRouteTimes() {
@@ -66,19 +91,33 @@ public class SpringJPABootstrap implements ApplicationListener<ContextRefreshedE
 	}
 
 	private void loadUsers() {
-		User user1 = new User("jonny@gmail.com", "j");
-		user1.setFirstName("Jonny");
-		user1.setLastName("Poe");
-		user1.setRole(UserRole.ROLE_ADMIN);
-		user1.setStatus(true);
-		userService.save(user1);
-
-		User user2 = new User("scott@gmail.com", "s");
-		user2.setFirstName("Scott");
-		user2.setLastName("Balwinski");
-		user2.setRole(UserRole.ROLE_USER);
-		user2.setStatus(true);
-		userService.save(user2);
+		
+		jonny.setFirstName("Jonny");
+		jonny.setLastName("Poe");
+		jonny.setRole(UserRole.ROLE_ADMIN);
+		jonny.setStatus(true);
+		userService.save(jonny);
+		
+		scott.setFirstName("Scott");
+		scott.setLastName("Balwinski");
+		scott.setRole(UserRole.ROLE_USER);
+		scott.setStatus(true);
+		userService.save(scott);
 	}
+	
+	
+	private void assignRoutes() {
+		List<Route> routes = routeService.findAll();
+		Route routeYesterday = routes.get(0);
+		Route routeToday = routes.get(1);
+		Route routeTomorrow = routes.get(3);
+		routeYesterday.setUser(jonny);	
+		routeToday.setUser(jonny);	
+		routeTomorrow.setUser(jonny);	
+		routeService.save(routeYesterday);
+		routeService.save(routeToday);
+		routeService.save(routeTomorrow);
+	}
+	
 
 }

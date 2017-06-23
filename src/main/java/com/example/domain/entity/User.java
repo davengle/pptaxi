@@ -1,11 +1,16 @@
 package com.example.domain.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.envers.Audited;
@@ -45,19 +50,23 @@ public class User {
 	
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
-
-//	 @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
-//	 @JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name =
-//	 "user_id") }, inverseJoinColumns = {
-//	 @JoinColumn(name = "role_id") })
-//	 private Set<Role> roles = new HashSet<Role>();
 	
+	
+	@OneToMany(cascade = CascadeType.ALL,  mappedBy = "user")
+	private List<Route> routes = new ArrayList<>();
+
 	public User() {
 	}
 	
 	public User(String email, String pword){
 		this.email = email;
 		this.password = pword;
+	}
+	
+	public User(String email, String pword, String fName) {
+		this.email = email;
+		this.password = pword;
+		this.firstName = fName;
 	}
 
 	public String getEmail() {
@@ -123,6 +132,26 @@ public class User {
 	public void setRole(UserRole role) {
 		this.role = role;
 	}
+
+
+	public List<Route> getRoutes() {
+		return routes;
+	}
+
+	public void setrRoutes(List<Route> routes) {
+		this.routes = routes;
+	}
+	
+	public void addRoute(Route route) {
+		routes.add(route);
+		route.setUser(this);
+	}
+	
+	public void removeRoute(Route route) {
+		route.setUser(null);
+		this.routes.remove(route);
+	}
+
 
 	@Override
 	public int hashCode() {

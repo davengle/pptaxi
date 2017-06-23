@@ -8,14 +8,23 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import org.hibernate.envers.Audited;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.example.service.UserService;
 
 @Entity
 @Audited
 public class Route {
+	
+	
+	@Transient
+	@Autowired
+	UserService userService;
 
 	
 	@Id
@@ -34,6 +43,8 @@ public class Route {
 	@DateTimeFormat(pattern ="HH:mm")
 	private LocalTime endTime;
 	
+	@OneToOne
+	private User user;
 	
 	
 	@Transient
@@ -78,6 +89,14 @@ public class Route {
 
 	public Long getId() {
 		return id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	

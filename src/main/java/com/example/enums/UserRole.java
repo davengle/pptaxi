@@ -2,8 +2,8 @@ package com.example.enums;
 
 public enum UserRole {
 	
-	ROLE_ADMIN,
-	ROLE_USER;
+	ROLE_USER,
+	ROLE_ADMIN;
 	
 	public String getRole() {
 		return name();

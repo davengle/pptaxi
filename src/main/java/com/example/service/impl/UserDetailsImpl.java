@@ -1,4 +1,4 @@
-package com.example.service;
+package com.example.service.impl;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -26,13 +26,7 @@ public class UserDetailsImpl implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
-//		Set<Role> roles = user.getRoles();
-//		for (Role role : roles) {
-//			authorities.add( new SimpleGrantedAuthority(role.getRole()));
-//		}
-		
 		authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
-		
 		return authorities;
 	
 	}

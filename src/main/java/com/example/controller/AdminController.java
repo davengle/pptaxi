@@ -1,7 +1,7 @@
 package com.example.controller;
 
 import java.io.IOException;
-import java.util.List;
+import java.time.LocalDate;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.entity.Route;
 import com.example.domain.entity.User;
-import com.example.service.RouteServiceImpl;
 import com.example.service.RouteTimeTypeService;
-import com.example.service.UserServiceImpl;
+import com.example.service.impl.RouteServiceImpl;
+import com.example.service.impl.UserServiceImpl;
 
 @Controller
 @RequestMapping("/admin")
@@ -31,6 +31,7 @@ public class AdminController {
 
 	@Autowired
 	private RouteTimeTypeService routeTimeService;
+	
 
 	@RequestMapping("/options")
 	public String adminOptions() {
@@ -39,7 +40,6 @@ public class AdminController {
 
 	@RequestMapping("/manageUsers")
 	public String manageUsers(Model model) {
-
 		model.addAttribute("user", new User());
 		return "admin/manageUsers";
 	}
@@ -64,8 +64,12 @@ public class AdminController {
 	
 	@RequestMapping("/manageRoutes")
 	public String manageRoutes(Model model) {
+		
+		Route route = new Route(LocalDate.now());
+		
 		model.addAttribute("routeTimes", routeTimeService.findAll());
-		model.addAttribute("route", new Route());
+		model.addAttribute("route", route);
+		model.addAttribute("allDailyRoutes", routeService.findAllByRouteDate(route.getRouteDate()));
 		model.addAttribute("quantity", new Integer(1));
 		return "admin/manageRoutes";
 	}
@@ -86,8 +90,12 @@ public class AdminController {
 				routeEntryQuantity--;
 			}
 			
+			model.addAttribute("routeTimes", routeTimeService.findAll());
+			model.addAttribute("route", route);
+			model.addAttribute("allDailyRoutes", routeService.findAllByRouteDate(route.getRouteDate()));
+			model.addAttribute("quantity", new Integer(1));
 			
-			return "admin/route/routeConfirm";
+			return "admin/manageRoutes";
 
 		}
 	}
@@ -97,11 +105,10 @@ public class AdminController {
 		if (bindingResult.hasErrors()) {
 			return "admin/manageRoutes";
 		} else {
-			List<Route> currentRoutes = routeService.findAllByRouteDate(route.getRouteDate());
 			model.addAttribute("routeTimes", routeTimeService.findAll());
-			model.addAttribute("route", new Route());
+			model.addAttribute("allDailyRoutes", routeService.findAllByRouteDate(route.getRouteDate()));
+			model.addAttribute("currentRoute", route);
 			model.addAttribute("quantity", new Integer(1));
-			model.addAttribute("currentRoutes", currentRoutes);
 			return "admin/manageRoutes";
 		}
 	}
