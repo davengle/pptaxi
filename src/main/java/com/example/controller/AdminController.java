@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -38,43 +39,50 @@ public class AdminController {
 		return "admin/adminOptions";
 	}
 
-	@RequestMapping("/manageUsers")
-	public String manageUsers(Model model) {
-		model.addAttribute("user", new User());
-		return "admin/manageUsers";
+	@RequestMapping("/user/viewUsers")
+	public String listUsers(Model model) {
+		model.addAttribute("users", userService.findAll());
+		return "admin/user/viewUsers";
 	}
 
+	@RequestMapping("user/create")
+	public String createNewUser(Model model) {
+		model.addAttribute("user", new User());
+		return "admin/user/createUserForm";
+	}
 	
-	@RequestMapping("/user/retrieve")
-	public String retrieve(String email, Model model) {
-		model.addAttribute("user", userService.findByEmail(email));
-		return "admin/manageUsers";
+	@RequestMapping("/user/edit/{id}")
+	public String userEdit(@PathVariable Long id, Model model) {
+		model.addAttribute("user", userService.findOne(id));
+		return "admin/user/modifyUserForm";
+	}
+	
+	@RequestMapping("/user/show/{id}")
+	public String retrieve(@PathVariable Long id, Model model) {
+		model.addAttribute("user", userService.findOne(id));
+		return "admin/user/showUser";
 	}
 
 	@PostMapping(value = "/user/save")
-	public String save(@Valid User user, BindingResult bindingResult, Model model) {
+	public String saveUser(@Valid User user, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
-			return "admin/manageUsers";
+			return "admin/user/createUserForm";
 		} else {
 			userService.save(user);
-			return "admin/user/userConfirm";
+			return	"redirect:/admin/user/viewUsers";
 		}
 	}
 	
-	
-	@RequestMapping("/manageRoutes")
-	public String manageRoutes(Model model) {
-		
-		Route route = new Route(LocalDate.now());
-		
-		model.addAttribute("routeTimes", routeTimeService.findAll());
-		model.addAttribute("route", route);
-		model.addAttribute("allDailyRoutes", routeService.findAllByRouteDate(route.getRouteDate()));
-		model.addAttribute("quantity", new Integer(1));
-		return "admin/manageRoutes";
+	@PostMapping(value = "/user/update")
+	public String updateUser(@Valid User user, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			return "admin/user/modifyUserForm";
+		} else {
+			userService.save(user);
+			return	"redirect:/admin/user/viewUsers";
+		}
 	}
-
-
+	
 	@RequestMapping(value = "/route/save")
 	public String routeSave(@Valid Route route, BindingResult bindingResult, Model model, HttpServletResponse response) throws IOException{
 
@@ -95,22 +103,33 @@ public class AdminController {
 			model.addAttribute("allDailyRoutes", routeService.findAllByRouteDate(route.getRouteDate()));
 			model.addAttribute("quantity", new Integer(1));
 			
-			return "admin/manageRoutes";
+			return "admin/route/add";
 
 		}
 	}
 
 	@RequestMapping(value = "/route/view")
-	public String routeView(@Valid Route route, BindingResult bindingResult, Model model) {
-		if (bindingResult.hasErrors()) {
-			return "admin/manageRoutes";
-		} else {
+	public String routeView(Route route, BindingResult bindingResult, Model model) {
+			if (null == route.getRouteDate()) {
+				route.setRouteDate(LocalDate.now());;
+			}
+			model.addAttribute("allDailyRoutes", routeService.findAllByRouteDate(route.getRouteDate()));
+			return "admin/route/view";
+	}
+	
+	@RequestMapping(value = "/route/add")
+	public String routeAdd(Route route, BindingResult bindingResult, Model model) {
+			if (null == route.getRouteDate()) {
+				route.setRouteDate(LocalDate.now());;
+			}
 			model.addAttribute("routeTimes", routeTimeService.findAll());
 			model.addAttribute("allDailyRoutes", routeService.findAllByRouteDate(route.getRouteDate()));
-			model.addAttribute("currentRoute", route);
-			model.addAttribute("quantity", new Integer(1));
-			return "admin/manageRoutes";
-		}
+			return "admin/route/add";
 	}
 
+	@RequestMapping("/route/remove/{id}")
+	public String deleteRoute(Model model, @PathVariable Long id) {
+		routeService.delete(id);
+		return "redirect:/admin/route/add";
+	}
 }

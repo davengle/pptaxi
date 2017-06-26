@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en"
+	layout:decorator="layouts/main">
+<head>
+	<title>Manage Routes</title>
+</head>
+<body>
+		
+	<div layout:fragment="content">
+	
+		<div class="container">
+		        <h1>Manage Routes</h1>
+		        
+		        <div class="viewRoute">
+		    		<h2> View current routes</h2>
+				    <form th:object="${route}"  th:action="@{/admin/route/view}" method="post">
+				    <div class="row">
+				        <div th:class="form-group" th:classappend="${#fields.hasErrors('routeDate')}? 'has-error'">
+							<div class="col-sm-2 control-lable">
+								<label for="existingRouteDate"><span class="required">*</span>Select Day:</label>
+							</div>
+							<div class="col-sm-2">
+								<input type="date" id="existingRouteDate" name="existingRouteDate" th:field="*{routeDate}" th:value="${route.routeDate}" />
+								<span th:if="${#fields.hasErrors('routeDate')}" th:errors="*{routeDate}"
+									th:class="help-block">Existing Route Date Errors</span>
+							</div>
+							<div class="col-sm-2">
+				        		<input type="submit" id="existingRouteSubmit" name="exisitingRouteSubmit" value="Submit" />
+				        	</div>
+				        	<div th:class="col-sm-6">
+									<a href="/admin/route/add">Add Routes</a>
+								</div>
+				        </div>
+			        </div>
+				    </form>
+			    </div>
+			    <div class="routesTable">
+			    	<div th:if="${not #lists.isEmpty(allDailyRoutes)}">
+			    	<h2> Current Routes </h2>
+			    	<table class="table table-striped">
+			    		<tr>
+			    			<th>Route Date</th>
+			    			<th>Start Time</th>
+			    			<th>End Time</th>
+			    			<th>Driver</th>
+			    			<th>Remove</th>
+			    		</tr>
+			    		<tr th:each="currentRoute : ${allDailyRoutes}">
+			    			<td th:text="${currentRoute.routeDate}"></td>
+			    			<td th:text="${currentRoute.startTime}"></td>
+			    			<td th:text="${currentRoute.endTime}"></td>
+			    			<td th:text="${currentRoute.user.firstName}"></td>
+					    	<td><a th:href="${'/admin/route/remove/' + currentRoute.id}">Remove</a> </td>
+			    		</tr>
+			    		
+			    	</table>
+			    	
+			    	
+			    	
+			    	</div>
+			    	
+			    </div>
+			        	
+		</div>	
+		
+	</div>
+		
+</body>
+
+
+</html>

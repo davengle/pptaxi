@@ -43,11 +43,16 @@ public class RouteServiceImpl implements RouteService{
 	public List<Route> findAllByRouteDateAndUser(LocalDate date, User user) {
 		return routeRepository.findAllByRouteDateAndUser(date, user);
 	}
+	
+	@Override
+	public Route findFirstByRouteDateAndUser(LocalDate date, User user){
+		return routeRepository.findFirstByRouteDateAndUser(date, user);
+	}
 
 	
 	/*
 	 * Method to find routes with distinct route start times based on route date and user.
-	* Could not find a way to make repo query return only the unique values that I wanted
+	* Could not find a way to make query return only the unique values that I wanted
 	* Return list is sorted by startTime ascending
 	*/
 	@Override
@@ -79,6 +84,29 @@ public class RouteServiceImpl implements RouteService{
 	public List<Route> findAllByUser(User user) {
 		return routeRepository.findAllByUser(user);
 	}
+
+	@Override
+	public void assignRoute(User user, Route route) {
+		route.setUser(user);
+		routeRepository.save(route);
+	}
+
+	@Override
+	public Route findOne(Long id) {
+		return routeRepository.findOne(id);
+	}
+
+	@Override
+	public Route findFirstByRouteDateAndUserAndStartTime(LocalDate routeDate, User unassignedUser,
+			LocalTime startTime) {
+		return routeRepository.findFirstByRouteDateAndUserAndStartTime(routeDate, unassignedUser, startTime);
+	}
+
+	@Override
+	public void delete(Long id) {
+		routeRepository.delete(id);
+	}
+
 
 
 

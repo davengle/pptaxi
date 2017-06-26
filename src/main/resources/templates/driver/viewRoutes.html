@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layouts/main">
+<head>
+<title>Driver route selection</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="container">
+
+			<div class="starter-template">
+
+
+				<form>
+					<div class="selectRouteDate">
+						<div th:class="row">
+							<div th:class="form-group">
+								<div th:class="col-sm-12">
+									<a href="/driver/selectDate">Add Routes</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+				<h2> Current selected routes</h2>
+				<div class="viewCurrentRoutes">
+					<div class="routesTable">
+				    	<div th:if="${not #lists.isEmpty(selectedRoutes)}">
+					    	<table class="table table-striped">
+					    		<tr>
+					    			<th>Route Date</th>
+					    			<th>Start Time</th>
+					    			<th>End Time</th>
+					    			<th>Remove</th>
+					    		</tr>
+					    		<tr th:each="route : ${selectedRoutes}">
+					    			<td th:text="${route.routeDate}"></td>
+					    			<td th:text="${route.startTime}"></td>
+					    			<td th:text="${route.endTime}"></td>
+					    			<td><a th:href="${'/driver/route/remove/' + route.id}">Remove</a> </td>
+					    		</tr>
+					    	</table>
+				    	</div>
+			    	</div>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+
+
+</html>

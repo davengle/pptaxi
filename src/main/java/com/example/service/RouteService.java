@@ -1,6 +1,7 @@
 package com.example.service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import com.example.domain.entity.Route;
@@ -19,8 +20,20 @@ public interface RouteService{
 	List<Route>	findAllByUser(User user);
 	
 	void save(Route route);
+	
+	void assignRoute(User user, Route route);
 
 	List<Route> findDistinctStartTimesByRouteDateAndUser(LocalDate date, User user);
+
+	Route findFirstByRouteDateAndUser(LocalDate date, User user);
+
+	Route findOne(Long id);
+
+	Route findFirstByRouteDateAndUserAndStartTime(LocalDate routeDate, User unassignedUser, LocalTime startTime);
+
+	void delete(Long id);
+	
+	
 
 
 

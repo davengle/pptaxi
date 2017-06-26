@@ -13,4 +13,6 @@ public interface UserService {
 	User save(User user);
 	
 	List<Route> findAllRoutesByEmail(String email);
+
+	User findOne(Long id);
 }

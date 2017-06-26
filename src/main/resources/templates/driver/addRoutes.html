@@ -10,8 +10,6 @@
 		<div class="container">
 
 			<div class="starter-template">
-
-
 				<form th:object="${route}"  th:action="@{/driver/selectDate}" method="post">
 					<div class="selectRouteDate">
 					<h1>Select Date:</h1>
@@ -23,14 +21,14 @@
 								<div th:class="col-sm-2">
 									<input type='date' name='routeDate' id='routeDate' th:value="${route.routeDate}" th:field="*{routeDate}"/>
 								</div>
-								<div th:class="col-sm-9">
-									<input type="submit" id="routeDateSubmit" name="routeDateSubmit" value="Submit" />
+								<div th:class="col-sm-3">
+									<input type="submit" id="routeDateSubmit" name="routeDateSubmit" value="Get available start times" />
 								</div>
 							</div>
 						</div>
 					</div>
 				</form>
-				 <form th:object="${route}"  th:action="@{/driver/assignRoutes}" method="post">
+				 <form th:object="${route}"  th:action="@{/driver/addRoutes}" method="post">
 					<div class="selectRouteTimes">
 						<h1>Available route start times:</h1>
 						<div th:class="row">

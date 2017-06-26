@@ -14,4 +14,6 @@ public interface UserRepository extends CrudRepository<User, Long>{
 	
 	List<Route> findAllRoutesByEmail(String email);
 	
+	List<User> findAll();
+	
 }

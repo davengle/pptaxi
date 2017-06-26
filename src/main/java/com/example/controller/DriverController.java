@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.entity.Route;
@@ -26,24 +27,22 @@ public class DriverController {
 	UserService userService;
 
 	
-	@RequestMapping("/modifyRoutes")
+	@RequestMapping("/viewRoutes")
 	public String modifyRoutes(Model model, Principal principal){
-		User unassignedUser = userService.findByEmail("unassigned");
 		User currentUser = userService.findByEmail(principal.getName());
-		LocalDate today = LocalDate.now();
-		Route route = new Route(today);
 		List<Route> selectedRoutes = routeService.findAllByUser(currentUser);
-		List<Route> startTimeAvailableRoutes = routeService.findDistinctStartTimesByRouteDateAndUser(today, unassignedUser);
-		model.addAttribute("availableRouteTimes", startTimeAvailableRoutes);
 		model.addAttribute("selectedRoutes", selectedRoutes);
-		model.addAttribute("route", route);
-		return "driver";
+		return "driver/viewRoutes";
 	}
 	
 	@RequestMapping("/selectDate")
 	public String selectDate(Model model, Principal principal, @ModelAttribute Route route){
 		User unassignedUser = userService.findByEmail("unassigned");
 		User currentUser = userService.findByEmail(principal.getName());
+		if (null == route.getRouteDate()) {
+			LocalDate today = LocalDate.now();
+			route = new Route(today);
+		}
 		LocalDate routeDate = route.getRouteDate();
 		Route returnedRoute = new Route(route.getRouteDate());
 		List<Route> selectedRoutes = routeService.findAllByUser(currentUser);
@@ -51,22 +50,32 @@ public class DriverController {
 		model.addAttribute("route", returnedRoute);
 		model.addAttribute("availableRouteTimes", startTimeAvailableRoutes);
 		model.addAttribute("selectedRoutes", selectedRoutes);
-		return "driver";
+		return "driver/addRoutes";
 	}
 	
-	@RequestMapping("/assignRoutes")
+	@RequestMapping("/addRoutes")
 	public String assignRoutes(Model model, Principal principal, @ModelAttribute Route route) {
 		User unassignedUser = userService.findByEmail("unassigned");
 		User currentUser = userService.findByEmail(principal.getName());
-		currentUser.addRoute(route);
-		userService.save(currentUser);
+		Route innerRoute = routeService.findFirstByRouteDateAndUserAndStartTime(route.getRouteDate(), unassignedUser, route.getStartTime());
+		routeService.assignRoute(currentUser, innerRoute);
+		routeService.save(innerRoute);
 		LocalDate routeDate = route.getRouteDate();
 		List<Route> selectedRoutes = routeService.findAllByUser(currentUser);
 		List<Route> startTimeAvailableRoutes = routeService.findDistinctStartTimesByRouteDateAndUser(routeDate, unassignedUser);
-		model.addAttribute("route", new Route(routeDate));
+		model.addAttribute("route", new Route(route.getRouteDate()));
 		model.addAttribute("availableRouteTimes", startTimeAvailableRoutes);
 		model.addAttribute("selectedRoutes", selectedRoutes);
-		return "driver";
+		return "driver/addRoutes";
+	}
+	
+	@RequestMapping("/route/remove/{id}")
+	public String deleteRoute(Model model, Principal principal, @PathVariable Long id) {
+		User unassignedUser = userService.findByEmail("unassigned");
+		Route route = routeService.findOne(id);
+		routeService.assignRoute(unassignedUser, route);
+		routeService.save(route);
+		return "redirect:/driver/viewRoutes";
 	}
 	
 
